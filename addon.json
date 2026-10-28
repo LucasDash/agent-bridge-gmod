@@ -1,0 +1,6 @@
+{
+  "title": "Agent Bridge",
+  "type": "tool",
+  "tags": ["build", "fun"],
+  "ignore": ["README.md", "STATUS.md"]
+}
