@@ -10,6 +10,7 @@ if SERVER then
     include("agent_bridge/chat.lua")
     include("agent_bridge/dash_reality.lua")
     include("agent_bridge/aim.lua")
+    include("agent_bridge/niknaks.lua")
 else
     include("agent_bridge/client.lua")
 end

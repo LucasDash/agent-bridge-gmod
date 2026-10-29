@@ -19,6 +19,7 @@ Use `call_package_tool` with package `agent_bridge`:
 | `status` | server | Version, map, player/entity counts and chat availability |
 | `read_chat` | server | Up to two attributed chat messages with epoch/sequence |
 | `inspect_entity` | server | Entity identity, transform, health and physics data |
+| `inspect_map_metadata` | server | Optional NikNaks current-map BSP metadata |
 | `inspect_dash_entity` | server | Optional Dash Reality API-1 entity and frozen-carrier subject inspection |
 | `inspect_player_aim` | server | Bounded on-demand trace from a specifically identified player's view |
 | `inspect_scene` | client | Up to eight nearby model entities |
@@ -27,6 +28,16 @@ Use `call_package_tool` with package `agent_bridge`:
 | `capture_stop` | client | Cancel only the owned capture job |
 
 For example, `status` accepts `{}`, `inspect_entity` accepts `{"id":123}`, and `capture_view` accepts `{"name":"scene_review_01","count":1}`. Capture is asynchronous: read `capture_status` until `active=false`, then check `outcome` and `final_save.saved`. Images and JSON reports are under `garrysmod/data/agent_bridge/captures/<name>/`. Names must be unique.
+
+`inspect_map_metadata` accepts `{}` and, on demand, uses the separately installed
+[NikNaks](https://steamcommunity.com/sharedfiles/filedetails/?id=2861839844)
+to report the current map name, BSP version, file size, revision and library
+version. It does not load the provider during addon startup. If needed, its first
+request initializes NikNaks via a protected `require`; this may be expensive and
+also initializes the provider's own extensions. Missing, incompatible, failed
+or invalid providers return `available=false` with a bounded reason. The tool
+does not expose map geometry or infer native NPC navigation. Changing the
+package declaration requires renewed GTerm package consent.
 
 `inspect_dash_entity` also takes an entity index, for example `{"id":123}`.
 When Dash Reality's `Development.InspectEntity` API-1 is loaded in the server
