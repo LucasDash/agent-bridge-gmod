@@ -11,6 +11,7 @@ if SERVER then
     include("agent_bridge/dash_reality.lua")
     include("agent_bridge/aim.lua")
     include("agent_bridge/niknaks.lua")
+    include("agent_bridge/vfire.lua")
 else
     include("agent_bridge/client.lua")
 end
