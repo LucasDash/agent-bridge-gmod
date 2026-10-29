@@ -19,12 +19,29 @@ Use `call_package_tool` with package `agent_bridge`:
 | `status` | server | Version, map, player/entity counts and chat availability |
 | `read_chat` | server | Up to two attributed chat messages with epoch/sequence |
 | `inspect_entity` | server | Entity identity, transform, health and physics data |
+| `inspect_dash_entity` | server | Optional Dash Reality API-1 entity and frozen-carrier subject inspection |
 | `inspect_scene` | client | Up to eight nearby model entities |
 | `capture_status` | client | Current capture state and saved artifact path |
 | `capture_view` | client | One to eight fixed-eye 1280x720 PNG images |
 | `capture_stop` | client | Cancel only the owned capture job |
 
 For example, `status` accepts `{}`, `inspect_entity` accepts `{"id":123}`, and `capture_view` accepts `{"name":"scene_review_01","count":1}`. Capture is asynchronous: read `capture_status` until `active=false`, then check `outcome` and `final_save.saved`. Images and JSON reports are under `garrysmod/data/agent_bridge/captures/<name>/`. Names must be unique.
+
+`inspect_dash_entity` also takes an entity index, for example `{"id":123}`.
+When Dash Reality's `Development.InspectEntity` API-1 is loaded in the server
+realm, it returns a bounded subset of its selected entity and, if present,
+the original NPC associated with a frozen carrier. It reports `available=false`
+with a reason if the provider is absent or incompatible, the entity is invalid,
+or the provider fails or supplies malformed data. It never invokes a gameplay
+action. Both addons continue working independently when the other is absent.
+
+This tool is available to whoever is authorized to use the GTerm package. The
+underlying API does not apply the host/superadmin checks or rate limit used by
+Dash Reality's player-facing inspector command. GTerm's package consent and
+connection controls therefore define access to this observation. The package
+declaration changes when the tool is added, so review and enable it again when
+GTerm requests renewed consent. Treat the returned data as a server snapshot,
+not evidence of client presentation or gameplay behavior.
 
 Chat capture starts with server autorun and includes ordinary and team chat.
 Entries include player names and SteamID64 values. Ordinary messages are
