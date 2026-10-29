@@ -8,7 +8,10 @@ Offline Lua fixtures exercise input, identity, trace type, scope and manifest
 behavior. On 2026-10-29 an isolated fixture compiled and ran in the dedicated
 GMod server realm without replacing the loaded addon. A fake player with real
 `util.TraceLine` matched a world hit and hit position; a mocked trace exercised
-the other cases. No real player was present. Actual player aim, renewed package
+the other cases. A later dedicated-server probe used an actual Player bot and
+physics prop: the candidate matched the engine entity trace and identities,
+rejected stale player/session identity, and cleaned up both fixtures. This is
+not a human-client input test. Actual player aim, renewed package
 consent, the package tool through MCP, multiplayer and client-rendered targets
 remain unverified. It does not install a continuous hook.
 
