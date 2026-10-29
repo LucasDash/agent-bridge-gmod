@@ -11,9 +11,14 @@ GMod server realm without replacing the loaded addon. A fake player with real
 the other cases. A later dedicated-server probe used an actual Player bot and
 physics prop: the candidate matched the engine entity trace and identities,
 rejected stale player/session identity, and cleaned up both fixtures. This is
-not a human-client input test. Actual player aim, renewed package
-consent, the package tool through MCP, multiplayer and client-rendered targets
-remain unverified. It does not install a continuous hook.
+not a human-client input test. On 2026-10-29 a human joined a separate
+dedicated server. A direct package-function probe matched 240 native traces,
+including world and entity hits. After the user granted fresh package consent,
+`inspect_player_aim` ran through GTerm MCP and returned the same entity and
+rounded hit position as an independently sampled native trace. The tested
+entity was `func_reflective_glass`; a human physics-prop/hitbox trace, multiple
+human players, other clients and client-only targets remain unverified. It does
+not install a continuous hook.
 
 ## Optional Dash Reality adapter
 
@@ -26,7 +31,10 @@ real addons. A disposable prop returned matching identity and physics data via
 the Dash API, adapter and package run function; absent/incompatible provider
 and invalid entity paths passed. Deferred prop removal was verified. The package
 function was invoked directly from server Lua, not through GTerm MCP. Renewed
-package consent, actual MCP transport and multi-player checks remain pending.
+package consent and an MCP test subsequently passed in an isolated dedicated
+server: a live player returned a snapshot, and an invalid entity returned
+`invalid_entity`. Provider-absent, frozen-carrier and multiplayer paths have not
+been validated through MCP.
 
 The first version provides seven GTerm package tools for session status,
 chat, entity and scene inspection, and offscreen capture.
