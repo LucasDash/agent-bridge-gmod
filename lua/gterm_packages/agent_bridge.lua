@@ -38,6 +38,12 @@ return {
             run = function(args) return api().InspectEntity(args.id) end},
         {name = "inspect_map_metadata", realm = "server", description = "Read bounded current-map BSP metadata through optional NikNaks; may initialize the library on first use.",
             inputSchema = empty, run = function() return api().InspectMapMetadata() end},
+        {name = "inspect_fire", realm = "server", description = "Read one explicitly identified entity's native fire flag and up to eight attached vFire entities through an optional provider; this does not modify fire.",
+            inputSchema = {type = "object", additionalProperties = false, properties = {
+                id = {type = "integer", minimum = 0, maximum = 65535},
+                creation_id = {type = "integer", minimum = -2147483648, maximum = 2147483647}},
+                required = {"id", "creation_id"}},
+            run = function(args) return api().InspectFire(args.id, args.creation_id) end},
         {name = "inspect_dash_entity", realm = "server", description = "Read an optional Dash Reality API-1 entity snapshot, including a frozen carrier's original NPC. This server-side tool uses GTerm package access, not Dash Reality's player permission or rate checks.",
             inputSchema = {type = "object", additionalProperties = false,
                 properties = {id = {type = "integer", minimum = 0, maximum = 65535}}, required = {"id"}},

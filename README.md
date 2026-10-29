@@ -19,6 +19,7 @@ Use `call_package_tool` with package `agent_bridge`:
 | `status` | server | Version, map, player/entity counts and chat availability |
 | `read_chat` | server | Up to two attributed chat messages with epoch/sequence |
 | `inspect_entity` | server | Entity identity, transform, health and physics data |
+| `inspect_fire` | server | Native fire flag and optional attached vFire snapshot |
 | `inspect_map_metadata` | server | Optional NikNaks current-map BSP metadata |
 | `inspect_dash_entity` | server | Optional Dash Reality API-1 entity and frozen-carrier subject inspection |
 | `inspect_player_aim` | server | Bounded on-demand trace from a specifically identified player's view |
@@ -54,6 +55,18 @@ connection controls therefore define access to this observation. The package
 declaration changes when the tool is added, so review and enable it again when
 GTerm requests renewed consent. Treat the returned data as a server snapshot,
 not evidence of client presentation or gameplay behavior.
+
+`inspect_fire` takes an entity index and creation ID, for example
+`{"id":123,"creation_id":45}`. It reports the engine's `IsOnFire` flag and,
+when vFire's `vFireGetFires` function is present, up to eight attached vFire
+entity identities and their states. `truncated=true` means the provider returned
+more entries. A missing or failing provider is reported as unavailable, not as
+evidence that the entity has no flames. This is an on-demand server snapshot:
+it does not detect nearby unattached fire, guarantee client rendering, or
+change fire. vFire's own lookup creates an array of all attached fires before
+the adapter can limit processing, so its allocation is not bounded by this
+tool. Entity and creation IDs are transient and can eventually be reused.
+The new package declaration requires renewed GTerm package consent.
 
 `inspect_player_aim` is an on-demand server-side line trace, using a player
 index, that player's creation ID, and the current `chat.epoch` from `status`:

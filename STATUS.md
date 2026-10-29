@@ -1,5 +1,26 @@
 # Agent Bridge status
 
+## Optional vFire inspection candidate
+
+An on-demand server tool reports the engine fire flag and a bounded list of
+flames attached to a specifically identified entity through vFire's existing
+lookup. A Lua 5.1 fixture covered invalid and stale identifiers, absent,
+failing and incompatible providers, invalid snapshots, native fire state and
+the eight-entry output limit. On 2026-10-29 an isolated dedicated server loaded
+the real vFire addon: seven checks passed for provider availability, package
+declaration, an empty target, one attached flame, identity rejection and flame
+removal. The package run function was invoked directly from server Lua. After
+the owner approved the changed package in a separate isolated GTerm instance,
+an MCP call returned a real attached vFire entity and a stale identity was
+rejected. The disposable fire and prop were removed. Multiplayer behavior,
+visual fire and a fresh main-server startup remain unverified. vFire's lookup
+allocates its full attached-fire list before the adapter can limit processing.
+The candidate was then hot-loaded into the main server without restarting the
+game. After separate main-GTerm package approval, an MCP call on the connected
+player returned the native flag and an empty attached-fire list; the session's
+chat epoch and retained entries were unchanged. An attached fire was not
+created on the main server for this check.
+
 ## Optional NikNaks metadata candidate
 
 An isolated source candidate adds a lazily initialized, bounded current-map
