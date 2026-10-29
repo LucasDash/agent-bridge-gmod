@@ -8,6 +8,7 @@ end
 include("agent_bridge/shared.lua")
 if SERVER then
     include("agent_bridge/chat.lua")
+    include("agent_bridge/dash_reality.lua")
 else
     include("agent_bridge/client.lua")
 end

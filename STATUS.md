@@ -1,5 +1,18 @@
 # Agent Bridge status
 
+## Optional Dash Reality adapter
+
+The source declares a separate server-side `inspect_dash_entity` tool for the
+read-only Dash Reality Development API-1. The adapter checks provider and
+snapshot versions and returns a small, validated selection of fields. Its
+offline fixture checks the absent, incompatible, failing and valid provider
+paths. On 2026-10-28 an isolated 64-bit dedicated Sandbox server loaded both
+real addons. A disposable prop returned matching identity and physics data via
+the Dash API, adapter and package run function; absent/incompatible provider
+and invalid entity paths passed. Deferred prop removal was verified. The package
+function was invoked directly from server Lua, not through GTerm MCP. Renewed
+package consent, actual MCP transport and multi-player checks remain pending.
+
 The first version provides seven GTerm package tools for session status,
 chat, entity and scene inspection, and offscreen capture.
 
