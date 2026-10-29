@@ -9,10 +9,13 @@ lazy loading, absent and failing providers, invalid snapshots and realm guard.
 On 2026-10-29 a separate dedicated server mounted NikNaks 0.96 alongside the
 development addon collection. The adapter and package declaration did not load
 NikNaks until the tool was invoked. The package run function then returned
-current `gm_construct` BSP metadata matching NikNaks. This invoked the package
-function directly from server Lua; fresh GTerm consent, MCP invocation and
-other maps remain unverified. The player session and installed Agent Bridge
-were not modified. Map metadata is not evidence of routes or visibility.
+current `gm_construct` BSP metadata matching NikNaks. After the owner approved
+the updated package in a separately scoped GTerm instance, the same tool ran
+through MCP on the isolated dedicated server and returned map name, BSP
+version 20, revision 1765 and file size 36,735,656 bytes. Other maps and
+production deployment remain unverified. The player session and installed
+Agent Bridge were not modified. Map metadata is not evidence of routes or
+visibility.
 
 ## Player aim snapshot candidate
 
