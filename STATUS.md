@@ -12,10 +12,12 @@ NikNaks until the tool was invoked. The package run function then returned
 current `gm_construct` BSP metadata matching NikNaks. After the owner approved
 the updated package in a separately scoped GTerm instance, the same tool ran
 through MCP on the isolated dedicated server and returned map name, BSP
-version 20, revision 1765 and file size 36,735,656 bytes. Other maps and
-production deployment remain unverified. The player session and installed
-Agent Bridge were not modified. Map metadata is not evidence of routes or
-visibility.
+version 20, revision 1765 and file size 36,735,656 bytes. The candidate was
+then deployed to the main dedicated server without restarting the game. The
+owner separately approved its updated GTerm package there, and an actual MCP
+call returned the same metadata while the existing chat epoch and messages
+remained intact. Other maps and a fresh main-server startup remain unverified.
+Map metadata is not evidence of routes or visibility.
 
 ## Player aim snapshot candidate
 
