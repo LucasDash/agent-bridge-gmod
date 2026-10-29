@@ -15,6 +15,11 @@ an MCP call returned a real attached vFire entity and a stale identity was
 rejected. The disposable fire and prop were removed. Multiplayer behavior,
 visual fire and a fresh main-server startup remain unverified. vFire's lookup
 allocates its full attached-fire list before the adapter can limit processing.
+The candidate was then hot-loaded into the main server without restarting the
+game. After separate main-GTerm package approval, an MCP call on the connected
+player returned the native flag and an empty attached-fire list; the session's
+chat epoch and retained entries were unchanged. An attached fire was not
+created on the main server for this check.
 
 ## Optional NikNaks metadata candidate
 
