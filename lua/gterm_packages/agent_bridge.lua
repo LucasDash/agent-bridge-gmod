@@ -40,6 +40,14 @@ return {
             inputSchema = {type = "object", additionalProperties = false,
                 properties = {id = {type = "integer", minimum = 0, maximum = 65535}}, required = {"id"}},
             run = function(args) return api().InspectDashEntity(args.id) end},
+        {name = "inspect_player_aim", realm = "server", description = "Trace one explicitly selected player's aim on request, using GTerm package access. Results are a momentary server snapshot; session and player identity are required.",
+            inputSchema = {type = "object", additionalProperties = false, properties = {
+                player_id = {type = "integer", minimum = 1, maximum = 65535},
+                player_creation_id = {type = "integer", minimum = -2147483648, maximum = 2147483647},
+                epoch = {type = "string", maxLength = 128},
+                distance = {type = "number", minimum = 1, maximum = 2048}},
+                required = {"player_id", "player_creation_id", "epoch"}},
+            run = function(args) return api().InspectPlayerAim(args) end},
         {name = "inspect_scene", realm = "client", description = "List up to eight nearby model entities relative to the local player.",
             inputSchema = {type = "object", additionalProperties = false, properties = {
                 radius = {type = "number", minimum = 1, maximum = 2048},

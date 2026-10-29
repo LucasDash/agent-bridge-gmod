@@ -1,5 +1,17 @@
 # Agent Bridge status
 
+## Player aim snapshot candidate
+
+An isolated development branch adds an on-demand server line trace for an
+explicit player, with session epoch and creation-ID checks and a 2048-unit cap.
+Offline Lua fixtures exercise input, identity, trace type, scope and manifest
+behavior. On 2026-10-29 an isolated fixture compiled and ran in the dedicated
+GMod server realm without replacing the loaded addon. A fake player with real
+`util.TraceLine` matched a world hit and hit position; a mocked trace exercised
+the other cases. No real player was present. Actual player aim, renewed package
+consent, the package tool through MCP, multiplayer and client-rendered targets
+remain unverified. It does not install a continuous hook.
+
 ## Optional Dash Reality adapter
 
 The source declares a separate server-side `inspect_dash_entity` tool for the
