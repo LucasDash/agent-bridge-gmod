@@ -9,10 +9,12 @@ failing and incompatible providers, invalid snapshots, native fire state and
 the eight-entry output limit. On 2026-10-29 an isolated dedicated server loaded
 the real vFire addon: seven checks passed for provider availability, package
 declaration, an empty target, one attached flame, identity rejection and flame
-removal. The package run function was invoked directly from server Lua. Actual
-GTerm package approval and an MCP call, multiplayer behavior and visual fire
-remain unverified. vFire's lookup allocates its full attached-fire list before
-the adapter can limit processing.
+removal. The package run function was invoked directly from server Lua. After
+the owner approved the changed package in a separate isolated GTerm instance,
+an MCP call returned a real attached vFire entity and a stale identity was
+rejected. The disposable fire and prop were removed. Multiplayer behavior,
+visual fire and a fresh main-server startup remain unverified. vFire's lookup
+allocates its full attached-fire list before the adapter can limit processing.
 
 ## Optional NikNaks metadata candidate
 
