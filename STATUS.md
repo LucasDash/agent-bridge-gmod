@@ -1,5 +1,19 @@
 # Agent Bridge status
 
+## Optional NikNaks metadata candidate
+
+An isolated source candidate adds a lazily initialized, bounded current-map
+BSP metadata tool backed by a separate NikNaks installation. The provider is
+not bundled. Twenty-one LuaJIT fixture checks cover the package declaration,
+lazy loading, absent and failing providers, invalid snapshots and realm guard.
+On 2026-10-29 a separate dedicated server mounted NikNaks 0.96 alongside the
+development addon collection. The adapter and package declaration did not load
+NikNaks until the tool was invoked. The package run function then returned
+current `gm_construct` BSP metadata matching NikNaks. This invoked the package
+function directly from server Lua; fresh GTerm consent, MCP invocation and
+other maps remain unverified. The player session and installed Agent Bridge
+were not modified. Map metadata is not evidence of routes or visibility.
+
 ## Player aim snapshot candidate
 
 An isolated development branch adds an on-demand server line trace for an

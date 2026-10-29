@@ -17,7 +17,7 @@ end
 function A.Status()
     local result = {schema = A.Schema, version = A.Version,
         realm = SERVER and "server" or "client", map = game.GetMap(),
-        time = os.time(), capabilities = SERVER and {"status", "read_chat", "inspect_entity", "inspect_dash_entity", "inspect_player_aim"}
+        time = os.time(), capabilities = SERVER and {"status", "read_chat", "inspect_entity", "inspect_dash_entity", "inspect_player_aim", "inspect_map_metadata"}
             or {"inspect_scene", "capture_status", "capture_view", "capture_stop"}}
     if SERVER then
         result.entityCount = #ents.GetAll()
