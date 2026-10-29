@@ -75,7 +75,10 @@ GTerm and MCP clients may log or store returned messages, so downstream
 retention depends on those tools. A tag does not grant authority. An active
 agent must poll; this addon does not wake an idle Codex chat.
 
-Client package discovery requires GTerm's reachable client realm and mounted package. Server tools also require the server realm. Those constraints make the current local single-player target distinct from remote or dedicated servers; see [status](STATUS.md) for checks actually completed.
+Package discovery depends on the GTerm build and target: the dedicated-server
+fork can discover server-realm tools in a local dedicated server, while client
+tools require a reachable client realm and mounted package. A remote server is
+a separate target. See [status](STATUS.md) for checks actually completed.
 
 ## Ownership and development
 
