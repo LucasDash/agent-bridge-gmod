@@ -61,6 +61,8 @@ return {
                 radius = {type = "number", minimum = 1, maximum = 2048},
                 limit = {type = "integer", minimum = 1, maximum = 8}}},
             run = function(args) return api().InspectScene(args or {}) end},
+        {name = "inspect_gwater", realm = "client", description = "Read the optional local gWater2 solver's active particle count and capacity; the values describe only this client.",
+            inputSchema = empty, run = function() return api().InspectGWater() end},
         {name = "capture_status", realm = "client", description = "Report capture availability and activity without loading the capture helper.",
             inputSchema = empty, run = function() return api().CaptureStatus() end},
         {name = "capture_view", realm = "client", description = "Capture one to eight 1280x720 PNGs from a fixed current eye view without changing player controls.",
