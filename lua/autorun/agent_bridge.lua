@@ -2,6 +2,7 @@ if SERVER then
     AddCSLuaFile("agent_bridge/shared.lua")
     AddCSLuaFile("agent_bridge/client.lua")
     AddCSLuaFile("agent_bridge/capture.lua")
+    AddCSLuaFile("agent_bridge/gwater.lua")
     AddCSLuaFile("gterm_packages/agent_bridge.lua")
 end
 
@@ -14,4 +15,5 @@ if SERVER then
     include("agent_bridge/vfire.lua")
 else
     include("agent_bridge/client.lua")
+    include("agent_bridge/gwater.lua")
 end

@@ -1,5 +1,18 @@
 # Agent Bridge status
 
+## Optional gWater2 observation candidate
+
+An on-demand client-only tool reports the local gWater2 solver's active particle
+count and capacity. The addon does not load or modify gWater2, poll the solver,
+scan particle positions or infer contact with fire. A Lua 5.1 fixture covered
+missing, incompatible and failing providers and invalid counters. On 2026-10-29
+the adapter and package run function were invoked directly in a real connected
+client, returning 64 active particles and a capacity of 100,000. They were
+temporarily loaded in memory and the prior global function was restored. The
+new declaration has not been approved or called through GTerm MCP; other client
+configurations and fresh startup remain unverified. Counts are per-client and
+are not authoritative server-side water state.
+
 ## Optional vFire inspection candidate
 
 An on-demand server tool reports the engine fire flag and a bounded list of

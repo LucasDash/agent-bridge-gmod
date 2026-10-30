@@ -24,11 +24,19 @@ Use `call_package_tool` with package `agent_bridge`:
 | `inspect_dash_entity` | server | Optional Dash Reality API-1 entity and frozen-carrier subject inspection |
 | `inspect_player_aim` | server | Bounded on-demand trace from a specifically identified player's view |
 | `inspect_scene` | client | Up to eight nearby model entities |
+| `inspect_gwater` | client | Optional local gWater2 solver particle count and capacity |
 | `capture_status` | client | Current capture state and saved artifact path |
 | `capture_view` | client | One to eight fixed-eye 1280x720 PNG images |
 | `capture_stop` | client | Cancel only the owned capture job |
 
 For example, `status` accepts `{}`, `inspect_entity` accepts `{"id":123}`, and `capture_view` accepts `{"name":"scene_review_01","count":1}`. Capture is asynchronous: read `capture_status` until `active=false`, then check `outcome` and `final_save.saved`. Images and JSON reports are under `garrysmod/data/agent_bridge/captures/<name>/`. Names must be unique.
+
+`inspect_gwater` accepts `{}` and reads only the local client's active particle
+count and capacity when its gWater2 solver is available. It does not scan
+particles, report water contact, synchronize clients or affect simulation.
+Absent, incompatible or failing providers return `available=false` with a
+bounded reason. Counts can differ across clients and are not server-authoritative.
+The added declaration requires renewed GTerm package consent for the client scope.
 
 `inspect_map_metadata` accepts `{}` and, on demand, uses the separately installed
 [NikNaks](https://steamcommunity.com/sharedfiles/filedetails/?id=2861839844)
