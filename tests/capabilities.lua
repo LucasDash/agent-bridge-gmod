@@ -1,6 +1,10 @@
 -- Offline contract fixture: provider names and profile status are untrusted.
 SERVER = true
-AgentBridge = {Version = 1}
+AgentBridge = nil
+game = {GetMap = function() return "fixture_map" end}
+ents = {GetAll = function() return {} end}
+player = {GetAll = function() return {} end}
+assert(loadstring(shared_source))()
 local checks = 0
 local function check(name, ok)
     checks = checks + 1
@@ -16,6 +20,14 @@ end
 check("new tool is server-only and has no inputs", tool and tool.realm == "server"
     and tool.inputSchema.additionalProperties == false and tool.inputSchema.properties == nil)
 check("original status declaration is preserved", status and status.realm == "server")
+local advertised = {}
+for _, name in ipairs(AgentBridge.Status().capabilities) do advertised[name] = true end
+check("status advertises the server capability tool", advertised.inspect_server_capabilities == true)
+SERVER = false
+local client_advertised = {}
+for _, name in ipairs(AgentBridge.Status().capabilities) do client_advertised[name] = true end
+check("client status does not advertise the server-only tool", client_advertised.inspect_server_capabilities == nil)
+SERVER = true
 local result = tool.run()
 check("schema and absent ULX", result.schema == 1 and result.providers.ulx.state == "unavailable")
 check("absent ULib", result.providers.ulib.state == "unavailable")
