@@ -17,6 +17,7 @@ Use `call_package_tool` with package `agent_bridge`:
 | Tool | Realm | Purpose |
 | --- | --- | --- |
 | `status` | server | Version, map, player/entity counts and chat availability |
+| `inspect_server_capabilities` | server | Optional runtime interfaces, ULX MOTD mode and session-profile status |
 | `read_chat` | server | Up to two attributed chat messages with epoch/sequence |
 | `inspect_entity` | server | Entity identity, transform, health and physics data |
 | `inspect_fire` | server | Native fire flag and optional attached vFire snapshot |
@@ -30,6 +31,23 @@ Use `call_package_tool` with package `agent_bridge`:
 | `capture_stop` | client | Cancel only the owned capture job |
 
 For example, `status` accepts `{}`, `inspect_entity` accepts `{"id":123}`, and `capture_view` accepts `{"name":"scene_review_01","count":1}`. Capture is asynchronous: read `capture_status` until `active=false`, then check `outcome` and `final_save.saved`. Images and JSON reports are under `garrysmod/data/agent_bridge/captures/<name>/`. Names must be unique.
+
+`inspect_server_capabilities` accepts `{}` and checks the currently exposed
+server interfaces for ULX, ULib, CAMI and Dash Reality's Development API-1.
+Its `unavailable` state means no corresponding global was detected; `unknown`
+means the interface is incomplete, invalid or failed inspection. This does not
+establish which addons are installed or mounted, or whether a player has a
+permission. When ULX's interface and MOTD ConVar are available, it reports
+the MOTD mode without reading the message, URL or file path.
+
+An optional `AgentSessionProfiles.GetStatus()` server provider can report
+`{active = "none"}` or an active profile identifier. Identifiers must contain
+1–48 lowercase ASCII letters, numbers, underscores or hyphens. It may also
+report `npcKills` as an integer from 0 to 2147483647 and `observerReady` and
+`experimentReady` as booleans; any field may be omitted. A missing, failing or
+malformed provider reports the session profile as unknown. No profile is
+activated or modified. This added tool changes the GTerm package and therefore
+requires renewed package consent for the server scope.
 
 `inspect_gwater` accepts `{}` and reads only the local client's active particle
 count and capacity when its gWater2 solver is available. It does not scan
@@ -113,6 +131,11 @@ tools require a reachable client realm and mounted package. A remote server is
 a separate target. See [status](STATUS.md) for checks actually completed.
 
 ## Ownership and development
+
+To run the offline server-capability fixture, use Python 3 with the `lupa`
+package installed and run `python tests/run_capabilities.py` from the addon
+root. It exercises the contract in Lua 5.1 and LuaJIT; a live GMod server and
+consented GTerm package call are separate checks.
 
 `AgentBridge` is the sole runtime namespace. Shared helpers describe versioned, bounded observations; `AgentBridge.Chat` owns one PlayerSay hook and `AgentBridge.Capture` owns its rendering hooks and cancellation command.
 Capture leaves the player's camera and controls available. It excludes the HUD and held viewmodel and captures a fixed view established at request time. `AgentBridge.Chat.Stop()` unregisters its chat hook; `AgentBridge.StopCapture()` stops capture. Source removal takes effect fully after a fresh process.

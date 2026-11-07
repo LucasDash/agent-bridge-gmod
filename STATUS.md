@@ -1,5 +1,14 @@
 # Agent Bridge status
 
+## Server capabilities candidate
+
+The optional `inspect_server_capabilities` tool reports selected runtime API
+shapes, the ULX MOTD mode and an optional session profile provider without
+changing server state. Its offline fixture checks missing, malformed and
+failing providers, ULX modes, identifier bounds, optional NPC kill counts,
+observer and experiment readiness, and the server realm guard.
+A fresh GMod server and an actual consented GTerm package call remain required.
+
 ## Optional gWater2 observation candidate
 
 An on-demand client-only tool reports the local gWater2 solver's active particle

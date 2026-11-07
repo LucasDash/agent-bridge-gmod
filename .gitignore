@@ -7,5 +7,7 @@ Thumbs.db
 *.log
 captures/
 
-# Local development fixtures and test evidence are kept outside the release.
-/tests/
+# Track only the reusable capability fixture; local evidence stays private.
+/tests/*
+!/tests/capabilities.lua
+!/tests/run_capabilities.py
