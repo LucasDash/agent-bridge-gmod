@@ -1,5 +1,81 @@
 # Agent Bridge status
 
+## gPeek-based native workspace candidate
+
+On 2026-11-14 the owner selected a native editor and requested a unified
+viewing/editing pane. Agent Bridge now provides an **Agent Editor** spawn-menu
+tab hosting a private gPeek browser instance. Its Lua extension is replaced
+per instance; no shared gPeek control is patched, and derived text previews
+retain the original viewer. Edits are session drafts or separately saved DATA
+copies. There is no execution or direct write-back. Noir was examined for
+feature inspiration; its source is not included.
+
+Lua 5.1 and LuaJIT fixtures cover source bounds, LF/CRLF handling, write errors,
+file switching, source conflicts, concurrent views, the session-draft limit,
+and preservation when a widget cannot represent a source. The owner tested a
+Veejay Lua file, confirmed navigation and saving, and the saved DATA bytes
+matched the session draft. The owner confirmed that the newer font and dark
+controls improved readability.
+
+The first candidate was copied into the existing loose Agent Bridge checkout
+after checking its clean `bbd05c64` base; the original loader and docs are in
+`gmod/staging/gpeek-noir-review/live-before/`. After a fresh GMod process and
+map load, `CreateBrowser` came from the installed addon, the Agent Editor tab
+was registered, and a hidden real-client panel passed open, edit, switch and
+restore checks while preserving gPeek's original text viewer. The user's
+previously saved DATA copy remains on disk.
+
+On 2026-11-15 a subsequent syntax-coloring candidate was tested in an isolated
+real-client panel. It retains native text input, selection and caret; verified
+screenshots showed aligned colors, selected text and accented characters. A
+pixel comparison of the underlying font established the native text origin and
+row spacing; the adjusted gutter needs a real scrolling check. The lexer covers
+GLua keywords, strings, long strings and comments and has Lua 5.1/LuaJIT tests.
+That initial coloring candidate falls back to native text for tabs, wrapped
+layouts, unsupported or invalid bytes, over 32 KiB, over 2,000 lines, or any line over 2 KiB. Work is
+debounced and sliced over frames; in one live 27.9 KiB fixture, the largest of
+38 parsing slices took 1.36 ms (not a general performance guarantee). Human
+typing and scrolling with the colored candidate, clean startup of that revision,
+non-local clients and wider addon compatibility remain to be tested. Changes
+were not committed or published at that stage.
+
+The syntax candidate was subsequently installed with the prior files backed
+up under `gmod/staging/gpeek-noir-review/live-before-syntax/`. The running
+client loaded the installed `gpeek_workspace.lua` and `lua_highlighter.lua`
+(`62e595b2...` and `da3ba08d...`). Its existing workspace was refreshed only
+after its open file was confirmed unmodified and identical to the resolved
+source; its text and caret were restored. A separate hidden panel using the
+installed code passed open, syntax generation, edit invalidation, recoloring,
+file switching and draft restoration. Actual human typing and scrolling with
+this revision and a fresh startup remain validation gates.
+
+On 2026-11-15 the next candidate added a bounded visual-line layout calibrated
+against a native text control. In an isolated running Windows GMod client,
+Dash Reality's `autorun/dash_reality.lua` reached syntax colors with 171 native
+and modeled visual rows (143 source lines), and Veejay's 96,251-byte normalized
+`traversal.lua` reached colors with 1,757 matching visual rows (1,710 source
+lines). Captures of the native and colored panes showed aligned glyphs for
+wrapped text and a tabbed fixture. Across 210 generated ASCII cases and another
+210 cases including tabs, modeled and native row counts agreed. Lua 5.1 and
+LuaJIT fixtures cover line continuations, simulated scrolling, draft behavior,
+and cancellation of stale highlighting. The maximum highlighted source is now
+128 KiB and 8,000 lines; tabs are supported on the tested Windows path.
+Unwrapped UTF-8 remains supported, while wrapped UTF-8, unsupported layouts and
+other declared limits retain native plain rendering. One isolated parsing
+benchmark of traversal took 20.85 ms across 72 coroutine resumes, with a worst
+single resume of 3.82 ms; it is not a general frame-time guarantee. Actual
+human scrolling, fresh startup, other operating systems and broader addon
+coverage still need testing. This remains a development candidate.
+
+The wrapped-layout candidate was then installed into the same loose development
+addon after verifying the prior hashes. Backups are in
+`gmod/staging/gpeek-noir-review/live-before-wrap/`. The actual installed Lua
+modules subsequently opened and highlighted Veejay's traversal source in an
+isolated live client panel, with matching native and modeled row counts and an
+unchanged input value. The open Dash Reality view was refreshed only after its
+text matched the source and it was not being edited; the text and caret were
+restored. Human scrolling and a fresh start of this revision remain unverified.
+
 ## Optional gWater2 observation candidate
 
 An on-demand client-only tool reports the local gWater2 solver's active particle

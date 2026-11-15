@@ -12,6 +12,39 @@ In GTerm's packages prompt, inspect and enable `agent_bridge`; consent is
 managed by GTerm, not this addon. This addon is currently distributed via Git,
 without a Workshop release.
 
+### gPeek-based source workspace
+
+With [gPeek](https://github.com/JWalkerMailly/GPeek) installed and enabled,
+open the spawn menu's **Agent Editor** tab. Select a Lua file in its addon
+tree to view and edit it in the same pane. To see loose development addons,
+enable gPeek's **Legacy Addons** setting. Other file types keep gPeek's
+original preview. The normal gPeek tab is unchanged.
+
+Switching files keeps up to 32 active or modified documents in session memory;
+they are lost when the game exits. **Save copy** writes a separate file under
+`garrysmod/data/agent_bridge/drafts/`. **Discard draft** drops the session
+copy, including any unsaved edits; existing saved copies remain on disk.
+Review and import a saved copy separately: this tool never updates an addon or
+Git checkout and does not execute the text.
+
+Sources resolve through GMod's shared `LUA` search path; another mounted addon
+may provide the same virtual path. A changed or unavailable source is flagged
+without replacing the session draft. Uniform LF or CRLF line endings are
+preserved; mixed endings, binary data, and sources over 256 KiB are rejected.
+The native editor shows syntax colors and source line numbers for supported
+text, including wrapped ASCII lines. Wrapped continuations do not receive a
+second line number. On Windows, tabbed text uses the native control's
+zero-width tab display. Unwrapped UTF-8 is also supported. The editor falls
+back to native plain text when it cannot safely match the control's layout,
+including wrapped UTF-8, tabs on untested platforms, unsupported bytes, files
+over 128 KiB, over 8,000 logical or visual lines, or a line over 2 KiB. These
+are highlighting limits; the separate source limit remains 256 KiB. The status
+bar reports the rendering mode. It uses a private per-instance adaptation of
+gPeek's panel internals, which may require updates when gPeek changes. This is
+a development candidate, not a finished IDE.
+
+### Agent tools
+
 Use `call_package_tool` with package `agent_bridge`:
 
 | Tool | Realm | Purpose |
