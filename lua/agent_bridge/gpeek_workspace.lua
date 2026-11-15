@@ -184,6 +184,15 @@ local function createExtension()
             local fontReady = width and width > 0 and width == thin and width == space and height and height > 0
             local validSyntax = thisView.record and thisView.syntax and thisView.syntaxText == thisView.record.text and
                 (system.IsWindows() or not thisView.syntaxHasTabs)
+            if validSyntax and fontReady and thisView.syntaxHasNonAscii and thisView.extendedText ~= thisView.syntaxText then
+                local safe, count = true, 0
+                for glyph in thisView.syntaxText:gmatch("[\194-\244][\128-\191]+") do
+                    count = count + 1
+                    if count > 1024 or not (glyph:byte(1) == 195 or glyph == "–" or glyph == "—") or
+                        surface.GetTextSize(glyph) ~= width then safe = false break end
+                end
+                thisView.extendedSafe, thisView.extendedText = safe and count > 0, thisView.syntaxText
+            end
             if validSyntax and fontReady and (thisView.layoutRequestWidth ~= w or thisView.layoutRequestText ~= thisView.syntaxText) then
                 thisView.layout, thisView.layoutText, thisView.layoutWidth, thisView.layoutJob = nil, nil, nil, nil
                 thisView.layoutRequestWidth, thisView.layoutRequestText = w, thisView.syntaxText
@@ -214,6 +223,9 @@ local function createExtension()
             -- use the same font and native text origin; if wrapping or other
             -- unsupported layout is detected, use normal native rendering.
             self:DrawTextEntryText(CLEAR, CODE_SELECT, CLEAR)
+            -- Native text/selection painting may change the active surface
+            -- font when the entry has focus. Restore it before drawing tokens.
+            surface.SetFont(CODE_FONT)
             height = height + 1
             for row = 0, math.ceil(h / height) do
                 local visualRow = visual and visual[first + row + 1]
@@ -298,7 +310,8 @@ local function createExtension()
                     thisView.layoutDue = thisView.layoutAttempts < 3 and RealTime() + 0.25 or nil
                     return
                 end
-                thisView.layoutJob = layout.Start(thisView.syntax, cap)
+                thisView.calibratedWidth, thisView.calibratedCapacity = thisView.layoutRequestWidth, cap
+                thisView.layoutJob = layout.Start(thisView.syntax, cap, thisView.extendedSafe and thisView.extendedText == thisView.syntaxText)
             end
             local started = SysTime()
             for _ = 1, 8 do
@@ -344,6 +357,31 @@ local function createExtension()
             record.text = self:GetValue()
             thisView.lines = lineCount(record.text)
             queueSyntax(thisView)
+            -- Small edits can be recolored immediately using the already
+            -- calibrated control width, avoiding a flash of uncolored text.
+            -- Larger or unusual files retain the bounded background path.
+            local text = record.text
+            local syntax, layout = AgentBridge.LuaHighlighter, AgentBridge.TextLayout
+            if #text > 8192 or thisView.calibratedWidth ~= self:GetWide() or
+                not thisView.calibratedCapacity or not istable(syntax) or not isfunction(syntax.Tokenize) or
+                not istable(layout) or not isfunction(layout.Build) then return end
+            for line in (text .. "\n"):gmatch("(.-)\n") do if #line > 2048 then return end end
+            local ok, rows, visual = pcall(function()
+                local parsed = syntax.Tokenize(text)
+                if not parsed then return nil end
+                return parsed, layout.Build(parsed, thisView.calibratedCapacity)
+            end)
+            if not ok or not rows or not visual then return end
+            thisView.syntax, thisView.syntaxText = rows, text
+            thisView.syntaxHasTabs = text:find("\t", 1, true) ~= nil
+            thisView.syntaxHasNonAscii = text:find("[\128-\255]") ~= nil
+            thisView.layout, thisView.layoutText, thisView.layoutWidth = visual, text, thisView.calibratedWidth
+            thisView.layoutRequestWidth, thisView.layoutRequestText = thisView.calibratedWidth, text
+            thisView.syntaxDue = nil
+            thisView.mode = "Syntax colors"
+            -- Bring the native row count up to date before the next paint.
+            self:InvalidateLayout(true)
+            updateStatus(thisView)
         end
         save.DoClick = function()
             local record = thisView.record
@@ -401,9 +439,11 @@ local function createExtension()
         M.views[path] = view
         M.drafts[path] = record
         view.loading = true
+        -- Create the native scrollbar while the entry accepts mouse input;
+        -- otherwise its internal slider can remain mouse-disabled.
+        view.entry:SetEditable(true)
         local configured, err = editor.ConfigureInput(view.entry, record.text)
         if not configured then message(err, true) return end
-        view.entry:SetEditable(true)
         view.loading = false
         view.lines = lineCount(record.text)
         queueSyntax(view)

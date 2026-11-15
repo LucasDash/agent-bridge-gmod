@@ -7,7 +7,7 @@ local M = {}
 AgentBridge.TextLayout = M
 local MAX_VISUAL_ROWS = 8000
 
-local function build(logicalRows, capacity, incremental)
+local function build(logicalRows, capacity, incremental, extended)
     if type(logicalRows) ~= "table" or type(capacity) ~= "number" or capacity < 4 or capacity % 1 ~= 0 then
         return nil, "capacity"
     end
@@ -24,7 +24,7 @@ local function build(logicalRows, capacity, incremental)
         local tokens = logicalRows[lineNumber]
         local parts = {}
         for _, token in ipairs(tokens) do
-            if token.text:find("[\128-\255\r\n]") then return nil, "characters" end
+            if token.text:find("[\r\n]") or (not extended and token.text:find("[\128-\255]")) then return nil, "characters" end
             parts[#parts + 1] = token.text
         end
         local line = table.concat(parts)
@@ -53,6 +53,9 @@ local function build(logicalRows, capacity, incremental)
 
         while cursor <= #line do
             local ch = line:sub(cursor, cursor)
+            local byte = ch:byte()
+            local charBytes = byte < 128 and 1 or (byte >= 194 and byte <= 223 and 2 or (byte >= 224 and byte <= 239 and 3 or 4))
+            if cursor + charBytes - 1 > #line then return nil, "characters" end
             local whitespace = ch == " " or ch == "\t"
             if whitespace then inWord = false
             elseif not inWord then wordStart, wordAtStart, inWord = cursor, justWrapped, true end
@@ -65,7 +68,9 @@ local function build(logicalRows, capacity, incremental)
             elseif ch ~= "\t" then
                 column = column + 1
             end
-            cursor = cursor + 1
+            local nextByte = line:byte(cursor)
+            local advance = nextByte < 128 and 1 or (nextByte >= 194 and nextByte <= 223 and 2 or (nextByte >= 224 and nextByte <= 239 and 3 or 4))
+            cursor = cursor + advance
             batch = batch + 1
             if incremental and batch >= 2048 then batch = 0 coroutine.yield() end
         end
@@ -76,5 +81,5 @@ local function build(logicalRows, capacity, incremental)
     return result
 end
 
-function M.Build(rows, capacity) return build(rows, capacity, false) end
-function M.Start(rows, capacity) return coroutine.create(function() return build(rows, capacity, true) end) end
+function M.Build(rows, capacity, extended) return build(rows, capacity, false, extended) end
+function M.Start(rows, capacity, extended) return coroutine.create(function() return build(rows, capacity, true, extended) end) end

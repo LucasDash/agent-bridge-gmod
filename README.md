@@ -34,9 +34,11 @@ preserved; mixed endings, binary data, and sources over 256 KiB are rejected.
 The native editor shows syntax colors and source line numbers for supported
 text, including wrapped ASCII lines. Wrapped continuations do not receive a
 second line number. On Windows, tabbed text uses the native control's
-zero-width tab display. Unwrapped UTF-8 is also supported. The editor falls
+zero-width tab display. Unwrapped UTF-8 and some wrapped accented Latin text
+and dashes are also supported when their glyphs match the code font's width.
+The editor falls
 back to native plain text when it cannot safely match the control's layout,
-including wrapped UTF-8, tabs on untested platforms, unsupported bytes, files
+including other wrapped UTF-8, tabs on untested platforms, unsupported bytes, files
 over 128 KiB, over 8,000 logical or visual lines, or a line over 2 KiB. These
 are highlighting limits; the separate source limit remains 256 KiB. The status
 bar reports the rendering mode. It uses a private per-instance adaptation of

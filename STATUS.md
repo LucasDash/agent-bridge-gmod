@@ -76,6 +76,49 @@ unchanged input value. The open Dash Reality view was refreshed only after its
 text matched the source and it was not being edited; the text and caret were
 restored. Human scrolling and a fresh start of this revision remain unverified.
 
+After restarting GMod, the owner reported that focusing the editor made its
+colored glyphs shrink and spread apart. The overlay now explicitly restores
+the code font after native selection painting. A Lua fixture simulates native
+painting changing the active font, and a separate real-client panel rendered
+correctly with that same forced font change. The actual focus transition still
+needs confirmation in the owner's editor; no saved draft was altered.
+
+After the next restart, the owner reported a brief loss of colors and line
+numbers while typing. For ASCII drafts up to 8 KiB, an edit now reuses the
+calibrated width and synchronously rebuilds bounded syntax and visual rows;
+the native layout is refreshed before painting. A Lua fixture and an isolated
+live client panel confirmed immediate recoloring after a simulated edit. Larger
+or unsupported drafts retain the background path, and a native layout mismatch
+still falls back to plain text. Interactive typing after deployment remains to
+be checked.
+
+The typing candidate was installed in the loose development addon, with the
+prior files saved under `gmod/staging/gpeek-noir-review/live-before-typing-fix/`.
+An isolated panel using the installed code retained syntax colors immediately
+after a simulated edit. With the owner's permission to discard the test draft,
+the open editor was refreshed and its text and caret were transferred.
+
+The owner reported that `dash_reality/cl_profiles.lua` opened without syntax
+formatting. Its wrapped text contains an en dash, previously excluded by the
+layout safety check. A candidate supports measured single-width accented Latin
+glyphs and en/em dashes without splitting their UTF-8 bytes. An isolated GMod
+panel displayed that file with colors and 47 modeled/native visual rows; a
+wrapped accented fixture matched a native text capture, and 210 generated
+samples matched native row counts. Other characters still fall back safely.
+The owner also reported that dragging the editor scrollbar did not work. An
+isolated live-client test reproduced the issue: the pointer hit the text entry
+and dragging did not scroll, although the mouse wheel did. Enabling mouse input
+before the native scrollbar is created fixed the test: the pointer hit the
+slider, dragging moved the first visible row from 0 to 1116, and the wheel also
+worked. The test passed again after opening an unavailable file and returning.
+The owner's interactive confirmation remains outstanding.
+
+Both fixes were installed in the loose development addon. The prior versions
+are retained under `gmod/staging/gpeek-noir-review/live-before-unicode-wrap/`
+and `live-before-scrollbar-fix/`. A live test of the installed code repeated
+the drag and wheel check successfully; the unmodified `cl_profiles.lua` view
+was refreshed with its text and caret preserved.
+
 ## Optional gWater2 observation candidate
 
 An on-demand client-only tool reports the local gWater2 solver's active particle
