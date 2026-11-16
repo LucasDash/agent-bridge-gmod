@@ -7,5 +7,4 @@ Thumbs.db
 *.log
 captures/
 
-# Local development fixtures and test evidence are kept outside the release.
 /tests/

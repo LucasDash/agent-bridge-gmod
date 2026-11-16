@@ -1,5 +1,23 @@
 # Agent Bridge status
 
+## Optional lab player policy — 2026-11-16
+
+The opt-in server policy keeps `PlayerNoClip` out of the generic deny-hook
+loop. Its dedicated hook inspects `desiredState`: entering noclip is denied,
+while exiting noclip is explicitly allowed. The existing offline policy
+fixture passed under Lua 5.1 and LuaJIT for disabled/enabled states, loadout,
+generic restrictions, and both noclip transitions. The main server deployment
+and human-client transition check are still pending.
+
+## Server capabilities candidate
+
+The optional `inspect_server_capabilities` tool reports selected runtime API
+shapes, the ULX MOTD mode and an optional session profile provider without
+changing server state. Its offline fixture checks missing, malformed and
+failing providers, ULX modes, identifier bounds, optional NPC kill counts,
+observer and experiment readiness, and the server realm guard.
+A fresh GMod server and an actual consented GTerm package call remain required.
+
 ## Optional gWater2 observation candidate
 
 An on-demand client-only tool reports the local gWater2 solver's active particle

@@ -8,7 +8,9 @@ end
 
 include("agent_bridge/shared.lua")
 if SERVER then
+    include("agent_bridge/lab_policy.lua")
     include("agent_bridge/chat.lua")
+    include("agent_bridge/capabilities.lua")
     include("agent_bridge/dash_reality.lua")
     include("agent_bridge/aim.lua")
     include("agent_bridge/niknaks.lua")
