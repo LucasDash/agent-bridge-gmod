@@ -1,8 +1,10 @@
-# Agent Bridge
+# Agent Toolkit for Garry's Mod
 
-A Garry's Mod addon that provides game-side observations and development
-utilities to external agents. [GTerm](https://github.com/Earu/GTerm) supplies
-the MCP transport and exposes the addon's opt-in tool package.
+Agent Toolkit contains Agent Bridge, a Garry's Mod addon providing game-side
+observations and development utilities to external agents. The installed
+addon and its GTerm package keep the `agent_bridge` name.
+[GTerm](https://github.com/Earu/GTerm) supplies the MCP transport and exposes
+the addon's opt-in tool package.
 
 ## Install and use
 
