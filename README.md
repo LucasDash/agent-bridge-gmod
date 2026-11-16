@@ -143,11 +143,6 @@ a separate target. See [status](STATUS.md) for checks actually completed.
 
 ## Ownership and development
 
-To run the offline server-capability fixture, use Python 3 with the `lupa`
-package installed and run `python tests/run_capabilities.py` from the addon
-root. It exercises the contract in Lua 5.1 and LuaJIT; a live GMod server and
-consented GTerm package call are separate checks.
-
 `AgentBridge` is the sole runtime namespace. Shared helpers describe versioned, bounded observations; `AgentBridge.Chat` owns one PlayerSay hook and `AgentBridge.Capture` owns its rendering hooks and cancellation command.
 Capture leaves the player's camera and controls available. It excludes the HUD and held viewmodel and captures a fixed view established at request time. `AgentBridge.Chat.Stop()` unregisters its chat hook; `AgentBridge.StopCapture()` stops capture. Source removal takes effect fully after a fresh process.
 
