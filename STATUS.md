@@ -1,5 +1,14 @@
 # Agent Bridge status
 
+## Optional lab player policy — 2026-11-16
+
+The opt-in server policy keeps `PlayerNoClip` out of the generic deny-hook
+loop. Its dedicated hook inspects `desiredState`: entering noclip is denied,
+while exiting noclip is explicitly allowed. The existing offline policy
+fixture passed under Lua 5.1 and LuaJIT for disabled/enabled states, loadout,
+generic restrictions, and both noclip transitions. The main server deployment
+and human-client transition check are still pending.
+
 ## Server capabilities candidate
 
 The optional `inspect_server_capabilities` tool reports selected runtime API

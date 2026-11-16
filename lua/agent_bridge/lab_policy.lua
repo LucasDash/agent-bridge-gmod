@@ -21,9 +21,17 @@ end)
 for _, event in ipairs({
     "PlayerSpawnProp", "PlayerSpawnRagdoll", "PlayerSpawnEffect", "PlayerSpawnNPC",
     "PlayerSpawnSENT", "PlayerSpawnVehicle", "PlayerSpawnSWEP", "PlayerGiveSWEP",
-    "CanTool", "CanProperty", "PlayerNoClip"
+    "CanTool", "CanProperty"
 }) do
     hook.Add(event, "AgentBridge.LabPolicy.Restrict", function()
         if enabled:GetBool() then return false end
     end)
 end
+
+hook.Add("PlayerNoClip", "AgentBridge.LabPolicy.NoClip", function(ply, desiredState)
+    if not enabled:GetBool() then return end
+    if desiredState then
+        return false -- Prevent entering noclip.
+    end
+    return true -- Allow exiting noclip.
+end)
