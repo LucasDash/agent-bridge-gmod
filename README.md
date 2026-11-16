@@ -1,8 +1,10 @@
-# Agent Bridge
+# Agent Toolkit for Garry's Mod
 
-A Garry's Mod addon that provides game-side observations and development
-utilities to external agents. [GTerm](https://github.com/Earu/GTerm) supplies
-the MCP transport and exposes the addon's opt-in tool package.
+Agent Toolkit contains Agent Bridge, a Garry's Mod addon providing game-side
+observations and development utilities to external agents. The installed
+addon and its GTerm package keep the `agent_bridge` name.
+[GTerm](https://github.com/Earu/GTerm) supplies the MCP transport and exposes
+the addon's opt-in tool package.
 
 ## Install and use
 
@@ -11,6 +13,14 @@ legacy addon and use one copy. Restart GMod after saving any live session.
 In GTerm's packages prompt, inspect and enable `agent_bridge`; consent is
 managed by GTerm, not this addon. This addon is currently distributed via Git,
 without a Workshop release.
+
+The optional dedicated lab player policy is disabled by default. A server
+owner can set `agent_bridge_lab_policy 1` to restrict Sandbox spawning, tools,
+properties and noclip, assign joining or spawning players to the `user` group,
+and supply fists and a camera on spawn. Set it to `0` to stop applying those
+hooks. Disabling does not restore previous user groups or loadouts for already
+connected players; reconnect or apply the desired settings explicitly. This is
+a session policy, not a complete security boundary for third-party addons.
 
 Use `call_package_tool` with package `agent_bridge`:
 
