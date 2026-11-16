@@ -12,6 +12,14 @@ In GTerm's packages prompt, inspect and enable `agent_bridge`; consent is
 managed by GTerm, not this addon. This addon is currently distributed via Git,
 without a Workshop release.
 
+The optional dedicated lab player policy is disabled by default. A server
+owner can set `agent_bridge_lab_policy 1` to restrict Sandbox spawning, tools,
+properties and noclip, assign joining or spawning players to the `user` group,
+and supply fists and a camera on spawn. Set it to `0` to stop applying those
+hooks. Disabling does not restore previous user groups or loadouts for already
+connected players; reconnect or apply the desired settings explicitly. This is
+a session policy, not a complete security boundary for third-party addons.
+
 Use `call_package_tool` with package `agent_bridge`:
 
 | Tool | Realm | Purpose |
