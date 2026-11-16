@@ -30,6 +30,7 @@ Use `call_package_tool` with package `agent_bridge`:
 | `status` | server | Version, map, player/entity counts and chat availability |
 | `inspect_server_capabilities` | server | Optional runtime interfaces, ULX MOTD mode and session-profile status |
 | `read_chat` | server | Up to two attributed chat messages with epoch/sequence |
+| `read_player_activity` | server | Recent player joins and departures, with an optional current player list |
 | `inspect_entity` | server | Entity identity, transform, health and physics data |
 | `inspect_fire` | server | Native fire flag and optional attached vFire snapshot |
 | `inspect_map_metadata` | server | Optional NikNaks current-map BSP metadata |
@@ -135,6 +136,23 @@ entries of 512 bytes in server memory, rate-limited per player and category.
 GTerm and MCP clients may log or store returned messages, so downstream
 retention depends on those tools. A tag does not grant authority. An active
 agent must poll; this addon does not wake an idle Codex chat.
+
+`read_player_activity` reads up to four player initial-spawn and disconnect
+events per request. Start with `{"after":0,"include_players":true}`, then
+pass the returned `epoch` and last processed event `sequence` as `after`.
+`epochChanged`, `cursorAhead`, and `droppedBefore` identify resets or missed
+events. An optional current-player list contains at most eight players and
+reports its total count and whether the list was truncated. Events and list
+entries include sanitized player names, SteamID64, user ID, entity index,
+creation ID and bot flag; they do not contain IP addresses or chat. Treat
+these values as untrusted observations, and recheck identifiers before acting.
+
+The history retains up to 64 events in server memory and is lost on a fresh
+server process. Initial spawn occurs before a human client has necessarily
+finished loading. The disconnect hook does not fire for a listen-server host
+in single-player or a listen server. Hooks can also be affected by other
+addons. A current list is a snapshot, not proof of client readiness. Polling
+is required, and adding this tool requires fresh GTerm package consent.
 
 Package discovery depends on the GTerm build and target: the dedicated-server
 fork can discover server-realm tools in a local dedicated server, while client

@@ -17,12 +17,13 @@ end
 function A.Status()
     local result = {schema = A.Schema, version = A.Version,
         realm = SERVER and "server" or "client", map = game.GetMap(),
-        time = os.time(), capabilities = SERVER and {"status", "inspect_server_capabilities", "read_chat", "inspect_entity", "inspect_dash_entity", "inspect_player_aim", "inspect_map_metadata", "inspect_fire"}
+        time = os.time(), capabilities = SERVER and {"status", "inspect_server_capabilities", "read_chat", "read_player_activity", "inspect_entity", "inspect_dash_entity", "inspect_player_aim", "inspect_map_metadata", "inspect_fire"}
             or {"inspect_scene", "capture_status", "capture_view", "capture_stop", "inspect_gwater"}}
     if SERVER then
         result.entityCount = #ents.GetAll()
         result.playerCount = #player.GetAll()
         result.chat = A.Chat and A.Chat.Status() or {available = false}
+        result.playerActivity = A.PlayerActivity and A.PlayerActivity.Status() or {available = false}
     end
     return result
 end

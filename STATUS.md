@@ -1,5 +1,21 @@
 # Agent Bridge status
 
+## Player activity candidate — 2026-11-16
+
+The server-only activity reader retains at most 64 initial-spawn and disconnect
+events and can return a current list of up to eight players on demand. It adds
+no polling loop and no gameplay actions. Lua 5.1 and LuaJIT fixtures passed 32
+checks each, including history overflow, cursor validation, player-list
+truncation, copied results and hook ownership across reload. An isolated GMod
+x64 dedicated server loaded a SHA-256-matched development copy and a temporary
+fixture. A real player bot generated initial-spawn and disconnect events; the
+package run function returned its matching entity, creation ID and user ID,
+listed it while present and returned an empty player list after departure. An
+epoch mismatch was also rejected. The fixture invoked the package function
+directly in server Lua, not through consented GTerm MCP. A human client,
+multiple real clients, addon hook conflicts and GTerm package consent remain
+unverified. The temporary server was stopped and its fixture addon removed.
+
 ## Optional lab player policy — 2026-11-16
 
 The opt-in server policy keeps `PlayerNoClip` out of the generic deny-hook
