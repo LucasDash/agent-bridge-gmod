@@ -20,8 +20,10 @@ without a restart. The owner approved the changed GTerm package; a real MCP
 call returned the connected human, and the existing chat epoch was preserved.
 The human then disconnected and reconnected: another MCP call returned both
 events in order with distinct user and creation IDs, and the current-player
-snapshot matched the new connection. Fresh server startup, multiple concurrent
-clients and hook interactions with other addons remain unverified.
+snapshot matched the new connection. After a fresh server startup, the owner
+reconnected and the same GTerm package returned the new initial-spawn event
+and current-player snapshot. Multiple concurrent clients and hook interactions
+with other addons remain unverified.
 
 ## Optional lab player policy — 2026-11-16
 
